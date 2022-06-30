@@ -2,42 +2,30 @@ import { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import pokemonPages from './pokemonPages';
 
 function PokemonList() {
   const [PokemonList, setPokemonList] = useState([])
   const [currentPageUrl, setCurrentPageUrl] = useState(('https://pokeapi.co/api/v2/pokemon'))
   const [page, setPage] = useState(1);
-  // const [offset, setOffset] = useState(0)
+  const [offset, setOffset] = useState(0)
 
-  // useEffect(() => {
-  //   fetch(currentPageUrl)
-  //   .then(res => res.json())
-  //   .then(res => {
-  //   setPokemonList(res.results)
-  //   })
-  // })
+  
 
   useEffect(() => {
     const getPokemonData = async() => {
-    const response = await fetch('https://pokeapi.co/api/v2/pokemon').then(res => res.json())
-    setPokemonList(response.results)
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1154`).then(res => res.json())
+    const endOffset = offset + 20
+    const currentPokemonList = response.results.slice(offset, endOffset)
+    setPokemonList(currentPokemonList)
   }
     getPokemonData()
   })
 
-  const fetchPokemonData = async (page) => {
-    let offset = (0 + page) * 20
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}`)
-    const data = res.json()
-    return data
-  }
-
   const handleChange = (event, value) => {
     setPage(value);
-    const result = fetchPokemonData(value)
-    result.then(res => {
-     setPokemonList(PokemonList.slice(15))
-    })
+    const newOffset = pokemonPages[value]
+    setOffset(newOffset - 20)
   };
 
 
@@ -48,7 +36,7 @@ function PokemonList() {
         {PokemonList.map((pokemon, index) =>
         <div className='pokemon-container' key={index}>
           <h3>{pokemon.name}</h3>
-          <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${index + 1}.png`} alt="" />
+          <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.url.split('/')[pokemon.url.split('/').length - 2]}.png`} alt="" />
          </div>  
           
         )}  
@@ -56,7 +44,7 @@ function PokemonList() {
         <>
         <Stack spacing={2}>
         <Typography>Page: {page}</Typography>
-        <Pagination count={21} page={page} onChange={handleChange} />
+        <Pagination count={58} page={page} onChange={handleChange} />
         </Stack>
           
           </>
@@ -108,3 +96,11 @@ export default PokemonList
   //   console.log(`User request page number ${event.selected}, which is offset ${newOffset}`)
   //   setPokemonOffset(newOffset)
   // }
+
+   // const fetchPokemonData = async (page) => {
+  //   let offset = (0 + page) * 20
+  //   const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}`)
+  //   const data = res.json()
+  //   return data
+  // }
+
