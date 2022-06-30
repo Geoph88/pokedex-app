@@ -59,10 +59,4 @@ const pokemonPages = {
     '58': 1160
 }
 
-let pokemon = {}
-  for (let i = 1; i < 59; i++) {
-    pokemon[i] = i * 20
-  }
-  console.log(pokemon)
-
 export default pokemonPages

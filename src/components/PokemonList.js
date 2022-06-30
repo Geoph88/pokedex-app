@@ -3,10 +3,11 @@ import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import pokemonPages from './pokemonPages';
+import PokemonDetails from './PokemonDetails';
+import {Routes, Route, Link} from 'react-router-dom'
 
 function PokemonList() {
   const [PokemonList, setPokemonList] = useState([])
-  const [currentPageUrl, setCurrentPageUrl] = useState(('https://pokeapi.co/api/v2/pokemon'))
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0)
 
@@ -35,8 +36,12 @@ function PokemonList() {
       <section className="pokemon-list-container">
         {PokemonList.map((pokemon, index) =>
         <div className='pokemon-container' key={index}>
-          <h3>{pokemon.name}</h3>
+          <Link to={`/PokemonDetails/${pokemon.name}`}>
+          <h3 className='pokemon-name'>{`${pokemon.name[0].slice().toUpperCase() + pokemon.name.slice(1)}`}</h3>
+          </Link>
           <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.url.split('/')[pokemon.url.split('/').length - 2]}.png`} alt="" />
+          
+          
          </div>  
           
         )}  
