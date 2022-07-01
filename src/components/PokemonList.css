@@ -1,0 +1,20 @@
+.pokemon-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 5rem;
+}
+
+.pokemon-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid;
+  box-shadow: 0 1 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+}
+
+.pokedex_id {
+  align-self: start;
+  margin-left: 1rem !important;
+}
+

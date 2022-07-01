@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react'
+import { createTheme } from '@mui/material/styles'
 
 function PokemonDetails() {
   let params = useParams()
@@ -58,7 +59,9 @@ function PokemonDetails() {
     })
   })
 
-
+  const style = {
+    backgroundColor: '#2196f3'
+  }
 
 
   return (
@@ -74,8 +77,10 @@ function PokemonDetails() {
       </div>
       {pokemonStats.map((stat, index) => 
       <div className="stats-container" key={index}>
-        <p> {stat.base_stat} </p>
-        <div> {stat.stat.name} </div>
+        <div width={stat.base_stat} style={style}>
+          <div> {stat.base_stat} </div>
+        </div>
+        <p> {stat.stat.name} </p>
       </div>
       )}
 

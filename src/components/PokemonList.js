@@ -4,18 +4,33 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import pokemonPages from './pokemonPages';
 import PokemonDetails from './PokemonDetails';
-import {Routes, Route, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import './PokemonList.css';
+import { Grid } from '@mui/material';
+import Button from '@mui/material/Button';
+import FavouritePokemon from './FavouritePokemon';
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import CardHeader from '@mui/material/CardHeader';
 
 function PokemonList() {
   const [PokemonList, setPokemonList] = useState([])
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0)
+  const [favouritePokemon, setFavouritePokemon] = useState({
+    pokemonName: [],
+    pokedex_id: [],
+    image: []
+  })
 
   
 
   useEffect(() => {
     const getPokemonData = async() => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1154`).then(res => res.json())
+    
     const endOffset = offset + 20
     const currentPokemonList = response.results.slice(offset, endOffset)
     setPokemonList(currentPokemonList)
@@ -23,28 +38,64 @@ function PokemonList() {
     getPokemonData()
   })
 
+  
+  function saveFavouritePokemon (pokemon, id, image) {
+    if (favouritePokemon !== null) {
+    id = id + 1
+    // const favouritePokemon = {pokemon, id, image}
+    fetch('/api/favouritePokemon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pokemon, id, image })
+      }).then(res => console.log(res)).catch(err => console.log(err))
+    }
+  }
+
+  // useEffect(saveFavouritePokemon, [favouritePokemon])
+
   const handleChange = (event, value) => {
     setPage(value);
     const newOffset = pokemonPages[value]
     setOffset(newOffset - 20)
   };
 
+  
+  const style = {
+    boxShadow: '0 1 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important'
+  }
+
+  
+
 
   return (  
   <>
     <h1>Welcome to the pokedex</h1>
       <section className="pokemon-list-container">
+        
         {PokemonList.map((pokemon, index) =>
-        <div className='pokemon-container' key={index}>
-          <Link to={`/PokemonDetails/${pokemon.name}`}>
+        <Card sx={{ maxWidth: 345, margin: '2rem' }}>
+        <div className='pokemon-container' style={style} key={index}>
+          <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
+              {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}
+            </Typography>
+            <Link to={`/PokemonDetails/${pokemon.name}`}>
+            <CardMedia
+            component='img'
+            height='140'
+            image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.url.split('/')[pokemon.url.split('/').length - 2]}.png`}
+            alt='image of a pokemon'
+            />
+          <CardContent>
           <h3 className='pokemon-name'>{`${pokemon.name[0].slice().toUpperCase() + pokemon.name.slice(1)}`}</h3>
+          </CardContent>
           </Link>
-          <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.url.split('/')[pokemon.url.split('/').length - 2]}.png`} alt="" />
-          
-          
-         </div>  
-          
+          <CardActions>
+          <Button variant="contained" onClick={() => {saveFavouritePokemon(pokemon.name, index, pokemon.url)}}>Catch this Pokemon</Button>
+          </CardActions>
+          </div>   
+          </Card>
         )}  
+        
         </section>
         <>
         <Stack spacing={2}>
@@ -58,54 +109,4 @@ function PokemonList() {
 }   
 
 export default PokemonList
-
-// componentDidMount() {
-//   const pokemonList = this.state.pokemonList
-//   this.getPokemonDataList().then(pokemons => this.setState({
-//     pokemonList: pokemons.results
-//     })
-//   )
-// }
-
-// {this.state.pokemonList.map((pokemon, index) => 
-//   <div key={index}>
-//   <h3>{pokemon.name}</h3>
-//   <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${index + 1}.png`} alt="" />
-//   <button onClick={pokemonInformation(index + 1)}>more info</button>
-// </div>
-// )}
-
-
-
-  // const handleChange = event => {
-  //   console.log(Number(event.target.ariaLabel.slice(10)))
-  // }
-  
-  // // for pagination
-  // useEffect(() => {
-  //   fetch(`https://pokeapi.co/api/v2/pokemon/?${pokemonOffset}`)
-  //   .then(res => res.json())
-  //   .then( res => {
-  //   const pokemonResponse = res
-  //   const pokemonResults = pokemonResponse.results
-  //   const endOffset = pokemonOffset + pokemonPerPage
-  //   console.log(`Loading pokemon from ${pokemonOffset} to ${endOffset}`)
-  //   setPokemonList(pokemonList.slice(pokemonOffset, endOffset))
-  //   setPageCount(Math.ceil(1154 / pokemonPerPage))
-  // }, [pokemonOffset, pokemonPerPage])
-  // })
-
-  // invoke when user click to request another page
-  // const handlePageClick = (event) => {
-  //   const newOffset = (event.selected * 25) % 20
-  //   console.log(`User request page number ${event.selected}, which is offset ${newOffset}`)
-  //   setPokemonOffset(newOffset)
-  // }
-
-   // const fetchPokemonData = async (page) => {
-  //   let offset = (0 + page) * 20
-  //   const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}`)
-  //   const data = res.json()
-  //   return data
-  // }
 
