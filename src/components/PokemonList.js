@@ -21,6 +21,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
+import { CardActionArea } from '@mui/material';
+import { createStyles, ThemeProvider, createTheme } from '@mui/material/styles'
 
 
 function PokemonList() {
@@ -39,10 +42,20 @@ function PokemonList() {
   const [type, setType] = useState(' ')
 
   const handleClick = (event) => {
-    console.log(event.value)
     setAnchorEl(event.currentTarget);
   };
 
+  const theme = createTheme({
+    components: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColour: 'red'
+          }
+        }
+      }
+    }
+  })
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -87,12 +100,9 @@ function PokemonList() {
     })
   };
 
-
   const types = ['Bug',	'Dark',	'Dragon',	'Electric',	'Fighting',	'Fire',	'Flying',	'Ghost',
   'Grass',	'Ground',	'Ice',	'Normal',	'Poison',	'Psychic',	'Rock',	'Steel',	'Water']
   
-
-
   return (  
   <>
     <h1>Welcome to the pokedex</h1>
@@ -146,10 +156,11 @@ function PokemonList() {
 
       <section className="pokemon-list-container">
         {PokemonList && PokemonList.map((pokemon, index) =>
+        
         <Card sx={{ maxWidth: 345, margin: '2rem' }}>
         <div className='pokemon-container' key={index}>
           <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
-              {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}
+            {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}
             </Typography>
             <Link to={`/PokemonDetails/${pokemon.name}`}>
             <CardMedia
@@ -164,19 +175,17 @@ function PokemonList() {
           </Link>
           <CardActions>
           <Button variant="contained" onClick={() => {saveFavouritePokemon(pokemon.name, index, pokemon.url)}}>Catch this Pokemon</Button>
-          </CardActions>
-          </div>   
+          </CardActions>  
+          </div>
           </Card>
         )}  
         
         </section>
         <>
-        <Stack spacing={2}>
-        <Typography>Page: {page}</Typography>
-        <Pagination count={58} page={page} onChange={handleChange} />
-        </Stack>
-          
-          </>
+          <Stack spacing={2}>
+          <Pagination count={58} page={page} onChange={handleChange} />
+          </Stack>
+        </>
   </>
   )
 }   

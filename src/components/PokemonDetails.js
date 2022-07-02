@@ -1,10 +1,57 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from 'react'
-import { createTheme } from '@mui/material/styles'
+import { useState, useEffect } from 'react';
+import './PokemonDetails.css'
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper'
+import { createStyles, ThemeProvider, createTheme } from '@mui/material/styles'
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+
 
 function PokemonDetails() {
   let params = useParams()
   let pokemonName = params.pokemonName
+  const style = {
+    display: 'flex',
+    justifyContent: 'center'
+  }
+
+  const imageBackgroundColor = {
+    backgroundColor: 'lightGrey',
+    borderRadius: '50px'
+  }
+
+  const colorsForTypes = {
+  bug: "B1C12E",
+  dark: "4F3A2D",
+  dragon: "755EDF",
+  electric: "FCBC17",
+  fairy: "F4B1F4",
+  fighting: "8C03128",
+  fire: "E73B0C",
+  flying: "A890F1",
+  ghost: "6060B2",
+  grass: "74C236",
+  ground: "D3B357",
+  ice: "A3E7FD",
+  normal: "A8A878",
+  poison: "A040A0",
+  psychic: "ED4882",
+  rock: "B9A156",
+  steel: "B5B5C3",
+  water: "3295F6",
+}
+
+  const tableRowHeading = {
+      backgroundColor: 'red',
+      color: 'white',
+      borderRadius: '2px'
+  }
 
   const [pokemonInformation, setPokemonInformation] = useState(' ')
   const [pokemonObject, setPokemonObject] = useState ({})
@@ -26,12 +73,12 @@ function PokemonDetails() {
       const pokemonAbilities = res.abilities.map(ability => ability.ability.name)
       const shinyFrontSprite = res.sprites['front_shiny']
       const shinyBackSprite = res.sprites['back_shiny']
-      
       setPokemonInformation
       (PokemonInformation)
       setPokemonStats(pokemonStats)
       setPokemonTypes(pokemonTypes)
       setPokemonAbilities(pokemonAbilities)
+      console.log(pokemonAbilities)
       setPokemonObject({pokemonStats,
         pokemonTypes,
         Sprite,
@@ -59,61 +106,109 @@ function PokemonDetails() {
     })
   })
 
-  const style = {
-    backgroundColor: '#2196f3'
-  }
-
 
   return (
     <>
     <section className="pokemon-details-container">
-      <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
-      <div className="image-container">
+      <header className="pokemon-details-header">
+        <div>{pokemonInformation.id}</div>
+        <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
         <img src={pokemonObject.Sprite}></img>
-        <img src={pokemonObject.shinyFrontSprite}></img>
-        <img src={pokemonObject.shinyBackSprite}></img>
-
-        <img src={pokemonObject.Image}></img>
-      </div>
-      {pokemonStats.map((stat, index) => 
-      <div className="stats-container" key={index}>
-        <div width={stat.base_stat} style={style}>
-          <div> {stat.base_stat} </div>
-        </div>
-        <p> {stat.stat.name} </p>
-      </div>
-      )}
-
-      {pokemonTypes.map((type, index) => 
+        {pokemonTypes.map((type, index) => 
         <div className="type-container" key={index}>
-        <div className="type-1">{type.type.name}</div>
-        <div className="type-2">{type.name}</div>      
+        <div className="type-1" style={{
+          backgroundColor: `#${colorsForTypes[type.type.name]}`
+        }}>{type.type.name}</div>
+        <div className="type-2" style={{
+          backgroundColor: `${colorsForTypes[type.name]}`,
+          color: "white"
+        }}>{type.name}</div>      
       </div> 
       )} 
-
-       <div className="ability_container">
-      {pokemonAbilities.map((ability, index) => 
-        <div className='ability' key={index}>{ability}</div>
-      )}
-
-      </div>  
-      <p>Base Experience: {pokemonInformation.base_experience}</p>
-      <p>Height: {pokemonInformation.height}</p>
-      <p>Pokedex Number: {pokemonInformation.id}</p>
-      <p>Weight:{pokemonInformation.weight}</p>
-      <p>Capture Rate: {pokedexEntry.captureRate}</p>
-      <p>Base Happiness: {pokedexEntry.baseHappiness}</p>
-
-      {eggGroups.map((eggroup, index) => 
-      <div className="egg-group" key={index}>{eggroup}</div>
-      )}
-      <article>
-        <p>{pokedexEntry.pokedexEntry}</p>
-        <div className="gender-ratio-container">
-          <div>{pokedexEntry.genderFemaleRatio}</div>
-          <div>{pokedexEntry.genderMaleRatio}</div>
+      </header>
+      <Grid container>
+        <Grid item xs={12} style={style}>
+        <div className="image-container">
+        <Grid container>
+          <Grid item xs={12} md={12} 
+            >
+            <img src={pokemonObject.Image}></img>
+          </Grid>
+          <Grid item xs={6} md={6}>
+          <img src={pokemonObject.shinyFrontSprite} style={imageBackgroundColor}></img>
+          </Grid>
+          <Grid item xs={6} md={6}>
+          <img src={pokemonObject.shinyBackSprite} style={imageBackgroundColor}></img>
+          </Grid>
+          </Grid>
         </div>
-      </article>
+      </Grid>
+
+      <Grid item xs={12} md={12}>
+      <table style={{
+        display: 'flex',
+        justifyContent: 'center'
+      }}>
+          <tbody>
+            <tr>
+              <th style={tableRowHeading}>Abilities</th>
+              <th style={tableRowHeading}>Height</th>
+              <th style={tableRowHeading}>Weight</th>
+              <th style={tableRowHeading}>Capture Rate</th>
+              <th style={tableRowHeading}>Base Happiness</th>
+              <th style={tableRowHeading}>Base Experience</th>
+              <th style={tableRowHeading}>Egg Group</th>
+              <th style={tableRowHeading}>Gender Ratio</th>
+            </tr>
+            <tr>
+              <td>{pokemonAbilities.map((ability, index) =>
+                <div key={index}>{ability}</div>
+              )}</td>
+              <td>{pokemonInformation.height}</td>
+              <td>{pokemonInformation.weight}</td>
+              <td>{pokedexEntry.captureRate}</td>
+              <td>{pokedexEntry.baseHappiness}</td>
+              <td>{pokemonInformation.base_experience}</td>
+              <td>{eggGroups.map((eggroup, index) => 
+               <div className="egg-group" key={index}>{eggroup}</div>
+              )}</td>
+              <td>
+                <div className="gender-ratio-container">
+                  <div>{pokedexEntry.genderFemaleRatio}</div>
+                  <div>{pokedexEntry.genderMaleRatio}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Grid>
+      <Grid item xs={12} md={12}>
+      <table className="pokedex-entry-table">
+        <tbody>
+          <tr>
+            <th>Pokedex Entry</th>
+          </tr>
+          <tr>
+           <tr>{pokedexEntry.pokedexEntry}</tr>
+          </tr>
+        </tbody>
+      </table>
+      </Grid>
+      <Grid item xs={4} md={12}>
+      {pokemonStats.map((stat, index) => 
+      <div className="stats-container" key={index}>
+        <p> {stat.stat.name} </p>
+        <div style = {{
+          width: `${stat.base_stat}%`,
+          backgroundColor: "blue"
+        }}
+        >
+          <div> {stat.base_stat} </div>
+        </div>
+      </div>
+      )}
+      </Grid>
+    </Grid>
     </section>
     </>
   )
