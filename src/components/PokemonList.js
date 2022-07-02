@@ -24,7 +24,7 @@ import Box from '@mui/material/Box';
 
 
 function PokemonList() {
-  const [PokemonList, setPokemonList] = useState([])
+  const [PokemonList, setPokemonList] = useState(null)
   const [searchBar, setSearchBar] = useState(null)
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0)
@@ -36,9 +36,10 @@ function PokemonList() {
   })
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [type, setType] = useState(' ')
 
   const handleClick = (event) => {
-    console.log(event)
+    console.log(event.value)
     setAnchorEl(event.currentTarget);
   };
 
@@ -77,7 +78,17 @@ function PokemonList() {
     setOffset(newOffset - 20)
   };
 
-  const types = ['Bug',	'Dark',	'Dragon',	'Electric',	'Fighting',	'Fighting',	'Fire',	'Flying',	'Ghost',
+  const handleTypeChange = (event) => {
+    const typeToLowerCase = event.target.value[0].toLowerCase() + event.target.value.slice(1)
+
+    fetch(`https://pokeapi.co/api/v2/type/${typeToLowerCase}`).then(res => res.json()).then(res => {
+      const pokemonByType = res.pokemon.map(pokemon => pokemon.pokemon)
+      setPokemonList(pokemonByType)
+    })
+  };
+
+
+  const types = ['Bug',	'Dark',	'Dragon',	'Electric',	'Fighting',	'Fire',	'Flying',	'Ghost',
   'Grass',	'Ground',	'Ice',	'Normal',	'Poison',	'Psychic',	'Rock',	'Steel',	'Water']
   
 
@@ -85,6 +96,7 @@ function PokemonList() {
   return (  
   <>
     <h1>Welcome to the pokedex</h1>
+    {/* for searching for a specific pokemon */}
     <div>
       <Button
         id="basic-button"
@@ -97,12 +109,12 @@ function PokemonList() {
       </Button>
       
       <Menu
-        id="basic-menu-two"
+        id="contained"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button-two',
+          'aria-labelledby': 'search-by-types',
         }}
       >
         {searchBar && searchBar.map((pokemon, index) =>
@@ -112,34 +124,28 @@ function PokemonList() {
         )}
       </Menu>
     </div>
-
+          {/* for searching for pokemon based on type */}
     <div>
-    <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        Search for a Type
-      </Button>
-       <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        {types.map((type, index) =>
-        <MenuItem key={index}>{type}</MenuItem>
-        )}
-      </Menu> 
-      </div>
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Search for a type</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={''}
+          label="Search for a type"
+          onChange={ handleTypeChange }
+        >
+          {types.map((oneType, index) => 
+          <MenuItem value={oneType} key={index}>{oneType}</MenuItem>
+          )}
+        </Select>
+      </FormControl>
+    </Box>
+    </div>
 
       <section className="pokemon-list-container">
-        {PokemonList.map((pokemon, index) =>
+        {PokemonList && PokemonList.map((pokemon, index) =>
         <Card sx={{ maxWidth: 345, margin: '2rem' }}>
         <div className='pokemon-container' key={index}>
           <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
