@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import PokemonList from './PokemonList'
 import Button from '@mui/material/Button'
+import { Navigate } from 'react-router-dom'
 
 
 export default function FavouritePokemon () {
@@ -26,6 +27,7 @@ export default function FavouritePokemon () {
     .then(() => {
       const newFavouritePokemon = favouritePokemon.map((pokemon, i) => i !== indexOfPokemonClicked)
       setFavouritePokemon(newFavouritePokemon)
+      getFavouritePokemon()
     }) 
   }
 
@@ -43,7 +45,6 @@ export default function FavouritePokemon () {
       <h3>{pokemon.name}</h3>
       <span>{pokemon.pokedex_id}</span>
       <img src={pokemon.image_url}></img>
-      <Button variant="contained" onClick={() => {deleteFavouritePokemon(index)}}>Release</Button>
     </div>
     )}
 

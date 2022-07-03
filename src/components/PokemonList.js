@@ -24,79 +24,77 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import { CardActionArea } from '@mui/material';
 import { createStyles, ThemeProvider, createTheme } from '@mui/material/styles'
+import Nav from './Nav'
 
 
 function PokemonList() {
   const [PokemonList, setPokemonList] = useState(null)
+  const [pokemonData, setPokemonData] = useState(null)
   const [searchBar, setSearchBar] = useState(null)
   const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(58)
   const [offset, setOffset] = useState(0)
-  const [favouritePokemon, setFavouritePokemon] = useState
-  ({
-    pokemonName: [],
-    pokedex_id: [],
-    image: []
-  })
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [favouritePokemonName, setFavouritePokemonName] = useState('')
+  const [favouritePokemonImage, setFavouriteImage] = useState('')
+  const [favouritePokedexId, setFavouritePokedexId] = useState('')
+
+
+
   const [type, setType] = useState(' ')
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const theme = createTheme({
-    components: {
-      styleOverrides: {
-        root: {
-          '&:hover': {
-            backgroundColour: 'red'
-          }
-        }
-      }
-    }
-  })
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+  
   useEffect(() => {
     const getPokemonData = async() => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1154`).then(res => res.json())
-    
+
+    const newPokemonData = response.results
     const endOffset = offset + 20
-    const currentPokemonList = response.results.slice(offset, endOffset)
+    const currentPokemonList = newPokemonData.slice(offset, endOffset)
+    setPokemonData(newPokemonData)
     setPokemonList(currentPokemonList)
     setSearchBar(response.results)
   }
     getPokemonData()
   }, [])
-  
-  function saveFavouritePokemon (pokemon, id, image) {
-    if (favouritePokemon !== null) {
-    id = id + 1
-    // const favouritePokemon = {pokemon, id, image}
+
+  const updateFavouritePokemon = (pokemon, image, pokedex_number) => {
+    pokedex_number = pokedex_number + 1
+    setFavouritePokemonName(pokemon)
+    setFavouriteImage(image)
+    setFavouritePokedexId(pokedex_number)
+
+    console.log({ favouritePokemonName, favouritePokemonImage, favouritePokedexId })
+
     fetch('/api/favouritePokemon', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pokemon, id, image })
-      }).then(res => console.log(res)).catch(err => console.log(err))
-    }
+      body: JSON.stringify({ favouritePokemonName, favouritePokemonImage, favouritePokedexId })
+      }).then(res => res.json())
+        .then(res => console.log(res))
   }
+  
+  // function saveFavouritePokemon() {
+    
+  // }
+
+  // useEffect(updateFavouritePokemon, [])
 
   const handleChange = (event, value) => {
     setPage(value);
-    const newOffset = pokemonPages[value]
+    let startOffset = offset + 20
+    let newOffset = pokemonPages[value]
+    setPokemonList(pokemonData.slice(startOffset, newOffset))
     setOffset(newOffset - 20)
   };
 
+  // for rendering pokemon by type
   const handleTypeChange = (event) => {
     const typeToLowerCase = event.target.value[0].toLowerCase() + event.target.value.slice(1)
 
     fetch(`https://pokeapi.co/api/v2/type/${typeToLowerCase}`).then(res => res.json()).then(res => {
       const pokemonByType = res.pokemon.map(pokemon => pokemon.pokemon)
       setPokemonList(pokemonByType)
+      // setPageCount(0)
     })
   };
 
@@ -105,35 +103,10 @@ function PokemonList() {
   
   return (  
   <>
-    <h1>Welcome to the pokedex</h1>
-    {/* for searching for a specific pokemon */}
-    <div>
-      <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        Search for a Pokemon
-      </Button>
-      
-      <Menu
-        id="contained"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'search-by-types',
-        }}
-      >
-        {searchBar && searchBar.map((pokemon, index) =>
-        <Link to={`/PokemonDetails/${pokemon.name}`}>
-        <MenuItem key={index}>{pokemon.name}</MenuItem>
-        </Link>
-        )}
-      </Menu>
-    </div>
+  <Nav 
+    searchBar={searchBar}
+    useEffect={useEffect}
+  />
           {/* for searching for pokemon based on type */}
     <div>
     <Box sx={{ minWidth: 120 }}>
@@ -157,7 +130,7 @@ function PokemonList() {
       <section className="pokemon-list-container">
         {PokemonList && PokemonList.map((pokemon, index) =>
         
-        <Card sx={{ maxWidth: 345, margin: '2rem' }}>
+        <Card sx={{ maxWidth: 345, margin: '2rem' }} key={index}>
         <div className='pokemon-container' key={index}>
           <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
             {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}
@@ -174,7 +147,7 @@ function PokemonList() {
           </CardContent>
           </Link>
           <CardActions>
-          <Button variant="contained" onClick={() => {saveFavouritePokemon(pokemon.name, index, pokemon.url)}}>Catch this Pokemon</Button>
+          <Button variant="contained" onClick={() => updateFavouritePokemon(pokemon.name, pokemon.url, index)}>Catch this Pokemon</Button>
           </CardActions>  
           </div>
           </Card>
@@ -183,7 +156,7 @@ function PokemonList() {
         </section>
         <>
           <Stack spacing={2}>
-          <Pagination count={58} page={page} onChange={handleChange} />
+          <Pagination count={pageCount} page={page} onChange={handleChange} />
           </Stack>
         </>
   </>
