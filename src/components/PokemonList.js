@@ -27,7 +27,7 @@ import { createStyles, ThemeProvider, createTheme } from '@mui/material/styles'
 import Nav from './Nav'
 
 
-function PokemonList() {
+function PokemonList({userId}) {
   const [PokemonList, setPokemonList] = useState(null)
   const [pokemonData, setPokemonData] = useState(null)
   const [searchBar, setSearchBar] = useState(null)
@@ -74,10 +74,11 @@ function PokemonList() {
   
   function saveFavouritePokemon() {
     if (favouritePokemonName !== null && favouritePokemonImage !== null && favouritePokedexId !== null) {
-    fetch('/api/favouritePokemon', {
+    fetch(`/api/favouritePokemon/${userId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
+        userId: userId,
         favouritePokemonName: favouritePokemonName,
         favouritePokemonImage: favouritePokemonImage, 
         favouritePokedexId: favouritePokedexId
@@ -89,19 +90,14 @@ function PokemonList() {
 
   useEffect(saveFavouritePokemon)
 
+  // for pagination
   const handleChange = (event, value) => {
-    if (value < page) {
-      let startOffset = pokemonPages[value]
-      newOffset = offset + 20
-    }
+    let startOffset = pokemonPages[value] - 20
+    let endOffset = pokemonPages[value]
+
     setPage(value);
-    let startOffset = offset + 20
-    let newOffset = pokemonPages[value]
-    console.log(startOffset)
-    console.log(newOffset)
-    console.log(pokemonData.slice(startOffset, newOffset))
-    setPokemonList(pokemonData.slice(startOffset, newOffset))
-    setOffset(newOffset - 20)
+
+    setPokemonList(pokemonData.slice(startOffset, endOffset))
   };
 
   // for rendering pokemon by type
@@ -140,6 +136,11 @@ function PokemonList() {
           'aria-labelledby': 'search-by-types',
         }}
       >
+        {searchBar && searchBar.map((pokemon, index) =>
+        <Link to={`/PokemonDetails/${pokemon.name}`}>
+        <MenuItem key={index}>{pokemon.name}</MenuItem>
+        </Link>
+        )}
       </Menu>
     </div>
           {/* for searching for pokemon based on type */}

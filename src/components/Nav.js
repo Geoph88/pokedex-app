@@ -20,6 +20,9 @@ export default function Nav({handleLogOut}) {
         <Link to='/dashboard'>
         <Toolbar>Dashboard</Toolbar>
         </Link>
+        <Link to='/FavouritePokemon'>
+        <Toolbar>Check out your faves</Toolbar>
+        </Link>
         <Toolbar onClick={() => handleLogOut()}>Logout</Toolbar>
       </AppBar>
       <Toolbar />

@@ -5,13 +5,13 @@ import Button from '@mui/material/Button'
 import { Navigate } from 'react-router-dom'
 
 
-export default function FavouritePokemon () {
+export default function FavouritePokemon ({userId}) {
 
   const [favouritePokemon, setFavouritePokemon] = useState(null)
 
 
   function getFavouritePokemon() {
-    fetch('/api/favouritePokemon')
+    fetch(`/api/favouritePokemon/${userId}`)
     .then(res => res.json())
     .then(res => {
       console.log(res)
@@ -42,9 +42,9 @@ export default function FavouritePokemon () {
     <div className='all-favourite-pokemon-container'>
     {favouritePokemon && favouritePokemon.map((pokemon, index) => 
     <div className='pokemon_container' key={index}>
-      <h3>{pokemon.name}</h3>
+      <h3>{pokemon.pokemon_name}</h3>
       <span>{pokemon.pokedex_id}</span>
-      <img src={pokemon.image_url}></img>
+      <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.image_url.split('/')[pokemon.image_url.split('/').length - 2]}.png`} alt="" />
     </div>
     )}
 

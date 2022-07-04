@@ -132,11 +132,15 @@ function App() {
       />
       </div>
       <Routes>
-        <Route path='/dashboard' element={<PokemonList/>}>
+        <Route path='/dashboard' element={<PokemonList
+        userId = {userId}
+        />}>
         </Route>
         <Route path='/PokemonDetails/:pokemonName' element={<PokemonDetails />}>
         </Route>
-        <Route path='/FavouritePokemon' element={<FavouritePokemon />}>  
+        <Route path='/FavouritePokemon' element={<FavouritePokemon 
+        userId = {userId}
+        />}>  
         </Route>
       </Routes>
     </>
