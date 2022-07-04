@@ -33,6 +33,7 @@ function App() {
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [userId, setUserId] = useState(0)
+  const [loggedIn, setLoggedIn] = useState(false)
 
   // for sign-up
   const handleUserNameChange = (event) => {
@@ -90,18 +91,21 @@ function App() {
     .then(user => user.json())
     .then(user => {
       setUserId(user.userId)
+      setLoggedIn(true)
       navigate('/dashboard')
     })
   }
 
+  const handleLogOut = () => {
+    setUserId(0)
+    setLoggedIn(false)
+    navigate('/')
+  }
 
-  return (
-  <>
-    <div className="App">
-      <Nav />
-    </div>
-    <Routes>
-      <Route path = '/' element={<SignUp
+  if(!loggedIn) {
+    return (
+      <Routes>
+        <Route path = '/' element={<SignUp
       name={name}
       email={email}
       password={password}
@@ -115,18 +119,29 @@ function App() {
       handleUserEmailChange = {handleUserEmailChange}
       handleUserPasswordChange = {handleUserPasswordChange}
       logIn = {logIn}
-      
       />}>
       </Route>
-      <Route path='/dashboard' element={<PokemonList/>}>
-      </Route>
-      <Route path='/PokemonDetails/:pokemonName' element={<PokemonDetails />}>
-      </Route>
-      <Route path='/FavouritePokemon' element={<FavouritePokemon />}>  
-      </Route>
-    </Routes>
-  </>
-  );
+      </Routes>
+    )
+  } else {
+    return (
+    <>
+      <div className="App">
+      <Nav 
+      handleLogOut={handleLogOut}
+      />
+      </div>
+      <Routes>
+        <Route path='/dashboard' element={<PokemonList/>}>
+        </Route>
+        <Route path='/PokemonDetails/:pokemonName' element={<PokemonDetails />}>
+        </Route>
+        <Route path='/FavouritePokemon' element={<FavouritePokemon />}>  
+        </Route>
+      </Routes>
+    </>
+    );
+  }
 }
 
 export default App;

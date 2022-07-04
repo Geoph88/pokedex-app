@@ -38,7 +38,16 @@ function PokemonList() {
   const [favouritePokemonImage, setFavouriteImage] = useState(null)
   const [favouritePokedexId, setFavouritePokedexId] = useState(null)
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const [type, setType] = useState(' ')
 
@@ -111,10 +120,28 @@ function PokemonList() {
   
   return (  
   <>
-  <Nav 
-    searchBar={searchBar}
-    useEffect={useEffect}
-  />
+  <div>
+  <Button
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        Search for a pokemon
+      </Button>
+      
+      <Menu
+        id="contained"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'search-by-types',
+        }}
+      >
+      </Menu>
+    </div>
           {/* for searching for pokemon based on type */}
     <div>
     <Box sx={{ minWidth: 120 }}>

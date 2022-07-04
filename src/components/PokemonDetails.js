@@ -113,9 +113,6 @@ function PokemonDetails() {
     <>
     <section className="pokemon-details-container">
       <header className="pokemon-details-header">
-        <Link to={`/dashboard`}>
-          <a>Dashboard</a>
-        </Link>
         <div>{pokemonInformation.id}</div>
         <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
         <img src={pokemonObject.Sprite}></img>
