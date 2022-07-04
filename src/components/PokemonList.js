@@ -34,9 +34,9 @@ function PokemonList() {
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(58)
   const [offset, setOffset] = useState(0)
-  const [favouritePokemonName, setFavouritePokemonName] = useState('')
-  const [favouritePokemonImage, setFavouriteImage] = useState('')
-  const [favouritePokedexId, setFavouritePokedexId] = useState('')
+  const [favouritePokemonName, setFavouritePokemonName] = useState(null)
+  const [favouritePokemonImage, setFavouriteImage] = useState(null)
+  const [favouritePokedexId, setFavouritePokedexId] = useState(null)
 
 
 
@@ -58,31 +58,38 @@ function PokemonList() {
   }, [])
 
   const updateFavouritePokemon = (pokemon, image, pokedex_number) => {
-    pokedex_number = pokedex_number + 1
     setFavouritePokemonName(pokemon)
     setFavouriteImage(image)
-    setFavouritePokedexId(pokedex_number)
-
-    console.log({ favouritePokemonName, favouritePokemonImage, favouritePokedexId })
-
+    setFavouritePokedexId(pokedex_number + 1)
+  }
+  
+  function saveFavouritePokemon() {
+    if (favouritePokemonName !== null && favouritePokemonImage !== null && favouritePokedexId !== null) {
     fetch('/api/favouritePokemon', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ favouritePokemonName, favouritePokemonImage, favouritePokedexId })
+      body: JSON.stringify({ 
+        favouritePokemonName: favouritePokemonName,
+         favouritePokemonImage: favouritePokemonImage, 
+         favouritePokedexId: favouritePokedexId
+         })
       }).then(res => res.json())
         .then(res => console.log(res))
+      }
   }
-  
-  // function saveFavouritePokemon() {
-    
-  // }
 
-  // useEffect(updateFavouritePokemon, [])
+  useEffect(saveFavouritePokemon)
 
   const handleChange = (event, value) => {
+    if (value < page) {
+      console.log(true)
+    }
     setPage(value);
     let startOffset = offset + 20
     let newOffset = pokemonPages[value]
+    console.log(startOffset)
+    console.log(newOffset)
+    console.log(pokemonData.slice(startOffset, newOffset))
     setPokemonList(pokemonData.slice(startOffset, newOffset))
     setOffset(newOffset - 20)
   };
@@ -94,7 +101,7 @@ function PokemonList() {
     fetch(`https://pokeapi.co/api/v2/type/${typeToLowerCase}`).then(res => res.json()).then(res => {
       const pokemonByType = res.pokemon.map(pokemon => pokemon.pokemon)
       setPokemonList(pokemonByType)
-      // setPageCount(0)
+      setPageCount(0)
     })
   };
 

@@ -10,6 +10,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import {Link} from 'react-router-dom';
+
 
 
 
@@ -111,6 +113,9 @@ function PokemonDetails() {
     <>
     <section className="pokemon-details-container">
       <header className="pokemon-details-header">
+        <Link to={`/dashboard`}>
+          <a>Dashboard</a>
+        </Link>
         <div>{pokemonInformation.id}</div>
         <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
         <img src={pokemonObject.Sprite}></img>
