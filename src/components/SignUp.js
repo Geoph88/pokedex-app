@@ -1,36 +1,24 @@
 import { useState, useEffect } from 'react'
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button'
+import {Routes, Route, Link, useNavigate, Redirect} from 'react-router-dom'
 
-export default function SignUp () {
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const handleUserNameChange = (event) => {
-    setName(event.target.value)
-  }
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value)
-  }
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const data = {name, email, password}
-
-    fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).then(response => console.log(response))
-  }
+export default function SignUp (
+      {
+        name,
+        email,
+        password,
+        userEmail,
+        userPassword,
+        handleSubmit,
+        userId,
+        handleUserNameChange,
+        handlePasswordChange,
+        handleEmailChange,
+        handleUserEmailChange,
+        handleUserPasswordChange,
+        logIn
+      }
+) {
 
   return (
     <>
@@ -38,7 +26,7 @@ export default function SignUp () {
     
     <section className='sign-up'></section>
     <h3>Sign up</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(event) => handleSubmit(name, email, password, event)}>
         <fieldset>
         <label htmlFor="'username">Username:</label>
         <input 
@@ -49,7 +37,7 @@ export default function SignUp () {
           />
         </fieldset>
         <fieldset>
-        <label htmlFor="'username">Email:</label>
+        <label htmlFor="'Email">Email:</label>
         <input 
         type='text' 
         name='email'
@@ -67,6 +55,30 @@ export default function SignUp () {
           />
         </fieldset>
         <button>Sign Up</button>  
+      </form>
+    </section>
+    <h3>Log in</h3>
+    <section className='login-section'>
+    <form onSubmit={(event) => logIn(userEmail, userPassword, event)}>
+        <fieldset>
+        <label htmlFor="'email">Email:</label>
+        <input 
+        type='text' 
+        name='email'
+        placeholder='email'
+        onChange={handleUserEmailChange}
+          />
+        </fieldset>
+        <fieldset>
+        <label htmlFor="'username">Password:</label>
+        <input 
+        type='password' 
+        name='password'
+        placeholder='password'
+        onChange={handleUserPasswordChange}
+          />
+        </fieldset>
+        <button>Log in</button>  
       </form>
     </section>
     </>

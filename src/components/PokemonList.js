@@ -70,9 +70,9 @@ function PokemonList() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         favouritePokemonName: favouritePokemonName,
-         favouritePokemonImage: favouritePokemonImage, 
-         favouritePokedexId: favouritePokedexId
-         })
+        favouritePokemonImage: favouritePokemonImage, 
+        favouritePokedexId: favouritePokedexId
+        })
       }).then(res => res.json())
         .then(res => console.log(res))
       }
@@ -82,7 +82,8 @@ function PokemonList() {
 
   const handleChange = (event, value) => {
     if (value < page) {
-      console.log(true)
+      let startOffset = pokemonPages[value]
+      newOffset = offset + 20
     }
     setPage(value);
     let startOffset = offset + 20
