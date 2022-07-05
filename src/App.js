@@ -66,6 +66,7 @@ function App() {
     .then(user => user.json())
     .then(user => {
       setUserId(user.userId)
+      setLoggedIn(true)
       navigate('/dashboard')
     })
   } 
