@@ -116,6 +116,13 @@ function PokemonList({userId}) {
   
   return (  
   <>
+  <section style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '5rem',
+    marginTop: '2rem'
+  }}>
   <div>
   <Button
         id="basic-button"
@@ -144,7 +151,7 @@ function PokemonList({userId}) {
       </Menu>
     </div>
           {/* for searching for pokemon based on type */}
-    <div>
+    <div style={{width: '11rem'}}>
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Search for a type</InputLabel>
@@ -162,6 +169,7 @@ function PokemonList({userId}) {
       </FormControl>
     </Box>
     </div>
+    </section>
 
       <section className="pokemon-list-container">
         {PokemonList && PokemonList.map((pokemon, index) =>
@@ -171,7 +179,7 @@ function PokemonList({userId}) {
           <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
             {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}
             </Typography>
-            <Link to={`/PokemonDetails/${pokemon.name}`}>
+            <Link to={`/PokemonDetails/${pokemon.name}`} style={{color: 'black'}}>
             <CardMedia
             component='img'
             height='140'
