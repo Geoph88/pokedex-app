@@ -44,34 +44,40 @@ export default function FavouritePokemon ({userId}) {
   return (
     <>
     <section className="favourite-pokemon-page">
-    <h1>These are the pokemon you've caught</h1>
-    <div className='all-favourite-pokemon-container'> 
-      
-      {favouritePokemon && favouritePokemon.map((pokemon, index) => 
-      <Card sx={{ maxWidth: 300 }} className='box-shadow' ley={index} >
-      <div className='pokemon_container' key={index}>
-        <Typography gutterBottom variant='h5' component='div'>
-          <span className='pokedex-id'>{pokemon.pokedex_id}</span>
-          <button onClick={() => deleteFavouritePokemon(pokemon.id)}>release</button>
-        </Typography>
+      <header style={{display: 'flex'}}>
+        <h1>These are the pokemon you've caught</h1>
+      </header>
+      <div className='all-favourite-pokemon-container'> 
+        {favouritePokemon && favouritePokemon.map((pokemon, index) => 
+        <Card sx={{ 
+          maxWidth: 345, 
+          margin: '2rem', 
+          border: 'solid', 
+          boxShadow:'5px 10px #888888'
+        }} className='box-shadow' key={index} >
+        <div className='pokemon_container' key={index}>
+          <Typography gutterBottom variant='h5' component='div'>
+            <span className='pokedex-id'>{pokemon.pokedex_id}</span>
+          </Typography>
 
-        <Link to={`/PokemonDetails/${pokemon.pokemon_name}`} style={{color: 'black'}}>
-        <CardMedia
-          component='img'
-          height='40%'
-          image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedex_id}.png`} 
-          alt='image of a pokemon'
-          key={index}
-          />
-          <div className='card-header-border' style={{border: 'solid', width:'100%'}}></div>
-        <CardContent>
-          <h3 key={index}>{pokemon.pokemon_name[0].slice().toUpperCase() + pokemon.pokemon_name.slice(1)}</h3>
-        </CardContent>
-        </Link> 
+          <Link to={`/PokemonDetails/${pokemon.pokemon_name}`} style={{color: 'black', marginTop: '5px'}}>
+            <CardMedia
+              component='img'
+              height='40%'
+              image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedex_id}.png`} 
+              alt='image of a pokemon'
+              key={index}
+              />
+              <div className='card-header-border' style={{border: 'solid', width:'100%'}}></div>
+            <CardContent>
+              <h3 key={index}>{pokemon.pokemon_name[0].slice().toUpperCase() + pokemon.pokemon_name.slice(1)}</h3>
+            </CardContent>
+          </Link> 
+        </div>
+        <button onClick={() => deleteFavouritePokemon(pokemon.id)} style={{marginLeft: '2%', marginBottom: '2%'}}>release</button>
+        </Card>
+        )}
       </div>
-      </Card>
-      )}
-    </div>
     </section>
     </>
   )

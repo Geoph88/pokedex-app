@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import './PokemonDetails.css'
+import './styles/PokemonDetails.css'
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper'
 import { createStyles, ThemeProvider, createTheme } from '@mui/material/styles'
@@ -55,20 +55,6 @@ function PokemonDetails({updateFavouritePokemon}) {
     backgroundColor: 'red',
     color: 'white',
     borderRadius: '2px'
-  }
-
-  let baseStateStyleBar = ''
-
-  function widthStyle(baseStat) {
-    if (baseStat > 100) {
-      baseStateStyleBar = {
-        width: '100%'
-      } 
-    } else {
-      baseStateStyleBar = {
-        width: `${baseStat}%`
-      }
-    }
   }
 
   const [pokemonInformation, setPokemonInformation] = useState(' ')
@@ -133,76 +119,75 @@ function PokemonDetails({updateFavouritePokemon}) {
           display: 'flex',
           justifyContent: 'center'
         }}>
-        <header className="pokemon-details-header" style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          marginTop: '8px',
-          backgroundColor: 'red',
-          width: '80%',
-          borderRadius: '5px'
-        }}>
-          <div>{pokemonInformation.id}</div>
-          <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
-          <img src={pokemonObject.Sprite}></img>
-          <div className="type-container">
-          {pokemonTypes.map((type, index) => 
-          <div key={index}>
-          <div className="type-1" style={{
-            backgroundColor: `#${colorsForTypes[type.type.name]}`,
-            width: '6em',
-            textAlign: 'center',
-            display: 'inline-block',
-            border: '.1em solid transparent',
-            padding: '.1em .2em .2em',
-            margin: '.1em, .015em',
-            borderRadius: '4em',
-            color: 'white'
-          }}>{type.type.name}</div>
-          <div className="type-2" style={{
-            backgroundColor: `${colorsForTypes[type.name]}`,
-            width: '6em',
-            textAlign: 'center',
-            display: 'inline-block',
-            border: '.1em solid transparent',
-            padding: '.1em .2em .2em',
-            margin: '.1em, .015em',
-            borderRadius: '4em',
-            color: 'white'
-          }}>{type.name}</div>      
-        </div> 
-        )} 
-        </div>
-        <img className="add-btn" onClick={() => updateFavouritePokemon(pokemonName, pokemonObject.Image, pokemonInformation.id - 1)} src={pokeball} style={{
-          width: '10%',
-          marginLeft: '5px'
-        }}/>
+          <header className="pokemon-details-header" style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            marginTop: '8px',
+            backgroundColor: 'red',
+            width: '80%',
+            borderRadius: '5px'
+          }}>
+            <div style = {{color: 'white'}}>{pokemonInformation.id}</div>
+            <h1 style={{color: 'white'}}>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
+            <img src={pokemonObject.Sprite}></img>
+            <div className="type-container">
+              {pokemonTypes.map((type, index) => 
+                <div key={index}>
+                  <div className="type-1" style={{
+                    backgroundColor: `#${colorsForTypes[type.type.name]}`,
+                    width: '6em',
+                    textAlign: 'center',
+                    display: 'inline-block',
+                    border: '.1em solid transparent',
+                    padding: '.1em .2em .2em',
+                    margin: '.1em, .015em',
+                    borderRadius: '4em',
+                    color: 'white'
+                  }}>{type.type.name}</div>
+                  <div className="type-2" style={{
+                    backgroundColor: `${colorsForTypes[type.name]}`,
+                    width: '6em',
+                    textAlign: 'center',
+                    display: 'inline-block',
+                    border: '.1em solid transparent',
+                    padding: '.1em .2em .2em',
+                    margin: '.1em, .015em',
+                    borderRadius: '4em',
+                    color: 'white'
+                  }}>{type.name}</div>      
+              </div> 
+              )} 
+            </div>
+          <img className="add-btn" onClick={() => updateFavouritePokemon(pokemonName, pokemonObject.Image, pokemonInformation.id - 1)} src={pokeball} style={{
+            width: '10%',
+            marginLeft: '5px'
+          }}/>
         </header>
       </section>
 
       <Grid container>
         <Grid item xs={12} style={style}>
-        <div className="image-container">
-        <Grid container>
-          <Grid item xs={12} md={12} 
-            >
-            <img src={pokemonObject.Image}></img>
-          </Grid>
-          <Grid item xs={6} md={6}>
-          <img src={pokemonObject.shinyFrontSprite} style={imageBackgroundColor}></img>
-          </Grid>
-          <Grid item xs={6} md={6}>
-          <img src={pokemonObject.shinyBackSprite} style={imageBackgroundColor}></img>
-          </Grid>
-          </Grid>
-        </div>
-      </Grid>
+          <div className="image-container">
+            <Grid container>
+                <Grid item xs={12} md={12}>
+                  <img src={pokemonObject.Image}></img>
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <img src={pokemonObject.shinyFrontSprite} style={imageBackgroundColor}></img>
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <img src={pokemonObject.shinyBackSprite} style={imageBackgroundColor}></img>
+                </Grid>
+            </Grid>
+          </div>
+        </Grid>
 
       <Grid item xs={4} md={12}>
-      <table style={{
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '1rem'
-      }}>
+        <table style={{
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '1rem'
+        }}>
           <tbody>
             <tr>
               <th style={tableRowHeading}>Abilities</th>
@@ -214,6 +199,7 @@ function PokemonDetails({updateFavouritePokemon}) {
               <th style={tableRowHeading}>Egg Group</th>
               <th style={tableRowHeading}>Gender Ratio</th>
             </tr>
+
             <tr style={{textAlign: 'center'}}>
               <td>{pokemonAbilities.map((ability, index) =>
                 <div key={index}>{ability}</div>
@@ -224,7 +210,7 @@ function PokemonDetails({updateFavouritePokemon}) {
               <td>{pokedexEntry.baseHappiness}</td>
               <td>{pokemonInformation.base_experience}</td>
               <td>{eggGroups.map((eggroup, index) => 
-               <div className="egg-group" key={index}>{eggroup}</div>
+                <div className="egg-group" key={index}>{eggroup}</div>
               )}</td>
               <td>
                 <div className="gender-ratio-container">
@@ -237,17 +223,17 @@ function PokemonDetails({updateFavouritePokemon}) {
         </table>
       </Grid>
       <Grid item xs={12} md={12}>
-      <table className="pokedex-entry-table" style={{
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '1rem'
-      }}>
+        <table className="pokedex-entry-table" style={{
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '1rem'
+        }}>
         <tbody>
           <tr>
             <th style={tableRowHeading}>Pokedex Entry</th>
           </tr>
           <tr>
-           <tr>{pokedexEntry.pokedexEntry}</tr>
+            <td>{pokedexEntry.pokedexEntry}</td>
           </tr>
         </tbody>
       </table>
@@ -284,22 +270,26 @@ function PokemonDetails({updateFavouritePokemon}) {
           <p> {stat.stat.name} </p>
           <div className='progress' style={{
             backgroundColor:'lightgray',
-            width: '50%'
+            width: '50%',
+            borderTopRightRadius: '10px',
+            borderBottomRightRadius: '10px'
           }}>
             <div className='progress-bar'
-            style={{
+              style={{
               backgroundColor: 'red', 
-              width: `${stat.base_stat}%`
-            }}
+              width: `${stat.base_stat}%`,
+              borderTopRightRadius: '10px',
+              borderBottomRightRadius: '10px'
+              }}
             >
             <small style={{color: 'white'}}> {stat.base_stat} </small>
-          </div>
+            </div>
           </div>
         </div>
       )}
-      </div>
-      </div>
-      </Grid>
+    </div>
+    </div>
+    </Grid>
     </Grid>
     </section>
     </>

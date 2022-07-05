@@ -56,7 +56,6 @@ const pokemonPages = {
     '55': 1100,
     '56': 1120,
     '57': 1140,
-    '58': 1160
 }
 
 export default pokemonPages

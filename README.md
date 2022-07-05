@@ -7,14 +7,14 @@ Geoffdex is a pokedex app where people can sign in and receive information about
 <a href="https://secure-refuge-39891.herokuapp.com/">
 Check out the website here</a>
 
-Here's a preview for the dashbaoard page
+Here's a preview for the dashboard page
 ![Alt text](/pokedex-app/src/Images/preview_for_app.png)
 
 Here's a breakdown of the wireframes
 ![Alt text](/pokedex-app/src/Images/exported-freehand.png.png)
 
 ## Get Started
-As this app is a fullstack application, instructions are in the git repo for the pokedex_api. There are instructions there as well as both the buildfolder and code for the backend.
+As this app is a fullstack application, instructions are in the git repo for the <a href="https://github.com/Geoph88/pokedex_api"></a>pokedex_api. There are instructions there as well as both the buildfolder and code for the backend.
 
 ## General approach
 I approached this by interacting with a Pokemon Api (found here) for the majority of my front-end application. I focused on retrieving and storing the correct data for the first few days of the project. 

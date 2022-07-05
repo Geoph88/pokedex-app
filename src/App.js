@@ -111,6 +111,7 @@ function App() {
     setFavouritePokemonName(pokemon)
     setFavouriteImage(image)
     setFavouritePokedexId(pokedex_number + 1)
+    alert(`You just caught ${pokemon}!`)
   }
 
   function saveFavouritePokemon() {
@@ -125,7 +126,6 @@ function App() {
         favouritePokedexId: favouritePokedexId
       })
       }).then(res => res.json())
-      .then(res => console.log(res))
     }
   }
 
