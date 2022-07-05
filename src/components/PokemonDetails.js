@@ -11,16 +11,18 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {Link} from 'react-router-dom';
+import { borderRadius } from "@mui/system";
+import { red } from "@mui/material/colors";
+import pokeball from '../Images/poke_ball.png'
 
-
-
-
-function PokemonDetails() {
+function PokemonDetails({updateFavouritePokemon}) {
   let params = useParams()
   let pokemonName = params.pokemonName
+
   const style = {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: '10%'
   }
 
   const imageBackgroundColor = {
@@ -50,9 +52,23 @@ function PokemonDetails() {
 }
 
   const tableRowHeading = {
-      backgroundColor: 'red',
-      color: 'white',
-      borderRadius: '2px'
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: '2px'
+  }
+
+  let baseStateStyleBar = ''
+
+  function widthStyle(baseStat) {
+    if (baseStat > 100) {
+      baseStateStyleBar = {
+        width: '100%'
+      } 
+    } else {
+      baseStateStyleBar = {
+        width: `${baseStat}%`
+      }
+    }
   }
 
   const [pokemonInformation, setPokemonInformation] = useState(' ')
@@ -80,7 +96,7 @@ function PokemonDetails() {
       setPokemonStats(pokemonStats)
       setPokemonTypes(pokemonTypes)
       setPokemonAbilities(pokemonAbilities)
-      console.log(pokemonAbilities)
+      
       setPokemonObject({pokemonStats,
         pokemonTypes,
         Sprite,
@@ -108,26 +124,61 @@ function PokemonDetails() {
     })
   })
 
+  
 
   return (
     <>
-    <section className="pokemon-details-container">
-      <header className="pokemon-details-header">
-        <div>{pokemonInformation.id}</div>
-        <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
-        <img src={pokemonObject.Sprite}></img>
-        {pokemonTypes.map((type, index) => 
-        <div className="type-container" key={index}>
-        <div className="type-1" style={{
-          backgroundColor: `#${colorsForTypes[type.type.name]}`
-        }}>{type.type.name}</div>
-        <div className="type-2" style={{
-          backgroundColor: `${colorsForTypes[type.name]}`,
-          color: "white"
-        }}>{type.name}</div>      
-      </div> 
-      )} 
-      </header>
+      <section className="pokemon-details-container">
+        <section style={{
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+        <header className="pokemon-details-header" style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          marginTop: '8px',
+          backgroundColor: 'red',
+          width: '80%',
+          borderRadius: '5px'
+        }}>
+          <div>{pokemonInformation.id}</div>
+          <h1>{pokemonName[0].slice().toUpperCase() + pokemonName.slice(1)}</h1>
+          <img src={pokemonObject.Sprite}></img>
+          <div className="type-container">
+          {pokemonTypes.map((type, index) => 
+          <div key={index}>
+          <div className="type-1" style={{
+            backgroundColor: `#${colorsForTypes[type.type.name]}`,
+            width: '6em',
+            textAlign: 'center',
+            display: 'inline-block',
+            border: '.1em solid transparent',
+            padding: '.1em .2em .2em',
+            margin: '.1em, .015em',
+            borderRadius: '4em',
+            color: 'white'
+          }}>{type.type.name}</div>
+          <div className="type-2" style={{
+            backgroundColor: `${colorsForTypes[type.name]}`,
+            width: '6em',
+            textAlign: 'center',
+            display: 'inline-block',
+            border: '.1em solid transparent',
+            padding: '.1em .2em .2em',
+            margin: '.1em, .015em',
+            borderRadius: '4em',
+            color: 'white'
+          }}>{type.name}</div>      
+        </div> 
+        )} 
+        </div>
+        <img className="add-btn" onClick={() => updateFavouritePokemon(pokemonName, pokemonObject.Image, pokemonInformation.id - 1)} src={pokeball} style={{
+          width: '10%',
+          marginLeft: '5px'
+        }}/>
+        </header>
+      </section>
+
       <Grid container>
         <Grid item xs={12} style={style}>
         <div className="image-container">
@@ -146,10 +197,11 @@ function PokemonDetails() {
         </div>
       </Grid>
 
-      <Grid item xs={12} md={12}>
+      <Grid item xs={4} md={12}>
       <table style={{
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        margin: '1rem'
       }}>
           <tbody>
             <tr>
@@ -162,12 +214,12 @@ function PokemonDetails() {
               <th style={tableRowHeading}>Egg Group</th>
               <th style={tableRowHeading}>Gender Ratio</th>
             </tr>
-            <tr>
+            <tr style={{textAlign: 'center'}}>
               <td>{pokemonAbilities.map((ability, index) =>
                 <div key={index}>{ability}</div>
               )}</td>
               <td>{pokemonInformation.height}</td>
-              <td>{pokemonInformation.weight}</td>
+              <td>{pokemonInformation.weight}kg</td>
               <td>{pokedexEntry.captureRate}</td>
               <td>{pokedexEntry.baseHappiness}</td>
               <td>{pokemonInformation.base_experience}</td>
@@ -176,8 +228,8 @@ function PokemonDetails() {
               )}</td>
               <td>
                 <div className="gender-ratio-container">
-                  <div>{pokedexEntry.genderFemaleRatio}</div>
-                  <div>{pokedexEntry.genderMaleRatio}</div>
+                  <div>♀: {pokedexEntry.genderFemaleRatio}</div>
+                  <div>♂: {pokedexEntry.genderMaleRatio}</div>
                 </div>
               </td>
             </tr>
@@ -185,10 +237,14 @@ function PokemonDetails() {
         </table>
       </Grid>
       <Grid item xs={12} md={12}>
-      <table className="pokedex-entry-table">
+      <table className="pokedex-entry-table" style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: '1rem'
+      }}>
         <tbody>
           <tr>
-            <th>Pokedex Entry</th>
+            <th style={tableRowHeading}>Pokedex Entry</th>
           </tr>
           <tr>
            <tr>{pokedexEntry.pokedexEntry}</tr>
@@ -197,18 +253,52 @@ function PokemonDetails() {
       </table>
       </Grid>
       <Grid item xs={4} md={12}>
-      {pokemonStats.map((stat, index) => 
-      <div className="stats-container" key={index}>
-        <p> {stat.stat.name} </p>
-        <div style = {{
-          width: `${stat.base_stat}%`,
-          backgroundColor: "blue"
-        }}
-        >
-          <div> {stat.base_stat} </div>
-        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginBottom: '2%'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '50%'
+          }}>
+            <header style={{
+              display: 'flex',
+              justifyContent: 'center',
+              backgroundColor: 'red',
+              color: 'white',
+              borderRadius: '5px', 
+              width: '50%' 
+            }}>
+              <h4>Stats:</h4>
+            </header>
       </div>
+      <div className='stats-table-container' style={{
+        width: '100%',
+        marginLeft: '50%'
+      }}>
+      {pokemonStats.map((stat, index) => 
+        <div className="stats-container" key={index}>
+          <p> {stat.stat.name} </p>
+          <div className='progress' style={{
+            backgroundColor:'lightgray',
+            width: '50%'
+          }}>
+            <div className='progress-bar'
+            style={{
+              backgroundColor: 'red', 
+              width: `${stat.base_stat}%`
+            }}
+            >
+            <small style={{color: 'white'}}> {stat.base_stat} </small>
+          </div>
+          </div>
+        </div>
       )}
+      </div>
+      </div>
       </Grid>
     </Grid>
     </section>

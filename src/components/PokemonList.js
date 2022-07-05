@@ -3,40 +3,31 @@ import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import pokemonPages from './pokemonPages';
-import PokemonDetails from './PokemonDetails';
 import {Link} from 'react-router-dom';
-import './PokemonList.css';
-import { Grid } from '@mui/material';
+import './styles/PokemonList.css';
 import Button from '@mui/material/Button';
-import FavouritePokemon from './FavouritePokemon';
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-import CardHeader from '@mui/material/CardHeader';
-import SearchPokemon from './SearchPokemon'
 import InputLabel from '@mui/material/InputLabel';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import { CardActionArea } from '@mui/material';
-import { createStyles, ThemeProvider, createTheme } from '@mui/material/styles'
-import Nav from './Nav'
+import pokeball from '../Images/poke_ball.jpeg'
 
-
-function PokemonList({userId}) {
+function PokemonList({
+  userId,
+  updateFavouritePokemon
+  }) {
   const [PokemonList, setPokemonList] = useState(null)
   const [pokemonData, setPokemonData] = useState(null)
   const [searchBar, setSearchBar] = useState(null)
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(58)
   const [offset, setOffset] = useState(0)
-  const [favouritePokemonName, setFavouritePokemonName] = useState(null)
-  const [favouritePokemonImage, setFavouriteImage] = useState(null)
-  const [favouritePokedexId, setFavouritePokedexId] = useState(null)
+  
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -65,30 +56,6 @@ function PokemonList({userId}) {
   }
     getPokemonData()
   }, [])
-
-  const updateFavouritePokemon = (pokemon, image, pokedex_number) => {
-    setFavouritePokemonName(pokemon)
-    setFavouriteImage(image)
-    setFavouritePokedexId(pokedex_number + 1)
-  }
-  
-  function saveFavouritePokemon() {
-    if (favouritePokemonName !== null && favouritePokemonImage !== null && favouritePokedexId !== null) {
-    fetch(`/api/favouritePokemon/${userId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        userId: userId,
-        favouritePokemonName: favouritePokemonName,
-        favouritePokemonImage: favouritePokemonImage, 
-        favouritePokedexId: favouritePokedexId
-        })
-      }).then(res => res.json())
-        .then(res => console.log(res))
-      }
-  }
-
-  useEffect(saveFavouritePokemon)
 
   // for pagination
   const handleChange = (event, value) => {
@@ -142,9 +109,11 @@ function PokemonList({userId}) {
         MenuListProps={{
           'aria-labelledby': 'search-by-types',
         }}
-      >
+        >
+        
         {searchBar && searchBar.map((pokemon, index) =>
         <Link to={`/PokemonDetails/${pokemon.name}`}>
+        
         <MenuItem key={index}>{pokemon.name}</MenuItem>
         </Link>
         )}
@@ -174,11 +143,12 @@ function PokemonList({userId}) {
       <section className="pokemon-list-container">
         {PokemonList && PokemonList.map((pokemon, index) =>
         
-        <Card sx={{ maxWidth: 345, margin: '2rem' }} key={index}>
-        <div className='pokemon-container' key={index}>
-          <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
-            {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}
+        <Card sx={{ maxWidth: 345, margin: '2rem', border: 'solid' }} key={index}>
+          <div className='pokemon-container' key={index}>
+            <Typography gutterBottom variant="h5" component="div" className='pokedex_id'>
+             {pokemon.url.split('/')[pokemon.url.split('/').length - 2]}  
             </Typography>
+            <div className='card-header-border' style={{border: 'solid', width:'100%'}}></div>
             <Link to={`/PokemonDetails/${pokemon.name}`} style={{color: 'black'}}>
             <CardMedia
             component='img'
@@ -189,20 +159,23 @@ function PokemonList({userId}) {
           <CardContent>
           <h3 className='pokemon-name'>{`${pokemon.name[0].slice().toUpperCase() + pokemon.name.slice(1)}`}</h3>
           </CardContent>
-          </Link>
-          <CardActions>
-          <Button variant="contained" onClick={() => updateFavouritePokemon(pokemon.name, pokemon.url, index)}>Catch this Pokemon</Button>
-          </CardActions>  
+          </Link> 
           </div>
+          <img className="add-btn" onClick={() => updateFavouritePokemon(pokemon.name, pokemon.url, index)} src={pokeball} style={{
+          width: '10%',
+          marginLeft: '5px'
+          }}/>
           </Card>
+          
+          
         )}  
-        
         </section>
-        <>
+
+        <div className='pagination-container'>
           <Stack spacing={2}>
           <Pagination count={pageCount} page={page} onChange={handleChange} />
           </Stack>
-        </>
+        </div>
   </>
   )
 }   

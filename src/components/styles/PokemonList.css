@@ -4,17 +4,21 @@
   gap: 5rem;
 }
 
+.box-shadow {
+  box-shadow: 10px;
+}
+
 .pokemon-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: solid;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .pokemon-container:hover {
   background: conic-gradient(red 0deg 90deg,white 90deg 270deg, red 270deg);
+  transform: scale(1.2);
 }
 
 .pokedex_id {
@@ -26,4 +30,25 @@ a {
   text-decoration: none;
   margin: auto;
 }
+
+.add-btn {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.add-btn:hover {
+  transform: scale(1.2);
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  background-color: red;
+  color: white;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+}
+
+
 

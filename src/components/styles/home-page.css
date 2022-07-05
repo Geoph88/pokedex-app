@@ -1,0 +1,49 @@
+
+.home-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://i.pinimg.com/originals/84/c6/62/84c662dbdece47ea669213aa48faaf63.jpg');
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  margin-top: 20px;
+  width: inherit;
+  height: fit-content
+}
+
+.sign-up, .login-section {
+  background-color: red;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5%;
+  color: white
+}
+
+header {
+  display: flex;
+  justify-content: center;
+}
+
+.signup-btn,
+.login-btn {
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 5px;
+  display: inline-block;
+  margin-left: 40%
+}
+
+form fieldset {
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+}

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import {Routes, Route, Link, useNavigate, Redirect} from 'react-router-dom'
-
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import './styles/home-page.css'
 
 export default function SignUp (
       {
@@ -20,15 +22,18 @@ export default function SignUp (
       }
 ) {
 
+
   return (
     <>
-    <section className='dashboard-page'>
-    
-    <section className='sign-up'></section>
+    <section className='home-page'>
+    <main>
+    <section className='sign-up'>
+      <header>
     <h3>Sign up</h3>
+      </header>
       <form onSubmit={(event) => handleSubmit(name, email, password, event)}>
         <fieldset>
-        <label htmlFor="'username">Username:</label>
+        <label htmlFor="'username">Username: </label>
         <input 
         type='text' 
         name='name'
@@ -37,7 +42,7 @@ export default function SignUp (
           />
         </fieldset>
         <fieldset>
-        <label htmlFor="'Email">Email:</label>
+        <label htmlFor="'Email">Email: </label>
         <input 
         type='text' 
         name='email'
@@ -46,7 +51,7 @@ export default function SignUp (
           />
         </fieldset>
         <fieldset>
-        <label htmlFor="'username">Password:</label>
+        <label htmlFor="'username">Password: </label>
         <input 
         type='password' 
         name='password'
@@ -54,14 +59,18 @@ export default function SignUp (
         onChange={handlePasswordChange}
           />
         </fieldset>
-        <button>Sign Up</button>  
+        <button className='signup-btn'>Sign Up</button>  
       </form>
     </section>
-    <h3>Log in</h3>
+    
+   
     <section className='login-section'>
+    <header>
+      <h3>Log in</h3>
+    </header>
     <form onSubmit={(event) => logIn(userEmail, userPassword, event)}>
         <fieldset>
-        <label htmlFor="'email">Email:</label>
+        <label htmlFor="'email">Email: </label>
         <input 
         type='text' 
         name='email'
@@ -70,7 +79,7 @@ export default function SignUp (
           />
         </fieldset>
         <fieldset>
-        <label htmlFor="'username">Password:</label>
+        <label htmlFor="'username">Password: </label>
         <input 
         type='password' 
         name='password'
@@ -78,9 +87,12 @@ export default function SignUp (
         onChange={handleUserPasswordChange}
           />
         </fieldset>
-        <button>Log in</button>  
+        <button className='login-btn'>Log in</button>  
       </form>
     </section>
+    </main>
+    </section>
+    
     </>
   )
 }

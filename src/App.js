@@ -34,6 +34,9 @@ function App() {
   const [userPassword, setUserPassword] = useState('')
   const [userId, setUserId] = useState(0)
   const [loggedIn, setLoggedIn] = useState(false)
+  const [favouritePokemonName, setFavouritePokemonName] = useState(null)
+  const [favouritePokemonImage, setFavouriteImage] = useState(null)
+  const [favouritePokedexId, setFavouritePokedexId] = useState(null)
 
   // for sign-up
   const handleUserNameChange = (event) => {
@@ -102,6 +105,32 @@ function App() {
     navigate('/')
   }
 
+  // for saving a favourite pokemon
+
+  const updateFavouritePokemon = (pokemon, image, pokedex_number) => {
+    setFavouritePokemonName(pokemon)
+    setFavouriteImage(image)
+    setFavouritePokedexId(pokedex_number + 1)
+  }
+
+  function saveFavouritePokemon() {
+    if (favouritePokemonName !== null && favouritePokemonImage !== null && favouritePokedexId !== null) {
+    fetch(`/api/favouritePokemon/${userId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        userId: userId,
+        favouritePokemonName: favouritePokemonName,
+        favouritePokemonImage: favouritePokemonImage, 
+        favouritePokedexId: favouritePokedexId
+      })
+      }).then(res => res.json())
+      .then(res => console.log(res))
+    }
+  }
+
+  useEffect(saveFavouritePokemon)
+
   if(!loggedIn) {
     return (
       <Routes>
@@ -133,10 +162,13 @@ function App() {
       </div>
       <Routes>
         <Route path='/dashboard' element={<PokemonList
-        userId = {userId}
+          userId = {userId}
+          updateFavouritePokemon={updateFavouritePokemon}
         />}>
         </Route>
-        <Route path='/PokemonDetails/:pokemonName' element={<PokemonDetails />}>
+        <Route path='/PokemonDetails/:pokemonName' element={<PokemonDetails 
+          updateFavouritePokemon={updateFavouritePokemon}
+        />}>
         </Route>
         <Route path='/FavouritePokemon' element={<FavouritePokemon 
         userId = {userId}
